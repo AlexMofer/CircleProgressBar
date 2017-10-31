@@ -1,1 +1,1 @@
-include ':app', ':circleprogressbar'
+include ':app'

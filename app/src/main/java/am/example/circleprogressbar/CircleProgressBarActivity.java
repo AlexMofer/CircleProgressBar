@@ -2,6 +2,9 @@ package am.example.circleprogressbar;
 
 import android.animation.ValueAnimator;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,7 +18,7 @@ import android.widget.Switch;
 
 import am.widget.circleprogressbar.CircleProgressBar;
 
-public class CircleProgressBarActivity extends BaseActivity implements
+public class CircleProgressBarActivity extends AppCompatActivity implements
         RadioGroup.OnCheckedChangeListener, SeekBar.OnSeekBarChangeListener,
         CompoundButton.OnCheckedChangeListener, View.OnClickListener{
 
@@ -28,20 +31,27 @@ public class CircleProgressBarActivity extends BaseActivity implements
     private View vDial;
     private View vLoading;
 
-
     @Override
-    protected int getContentViewLayoutResources() {
-        return R.layout.activity_circleprogressbar;
-    }
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_circleprogressbar);
+        Toolbar mToolbar = findViewById(R.id.circleprogressbar_toolbar);
+        if (mToolbar != null) {
+            setSupportActionBar(mToolbar);
+            mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onBackPressed();
+                }
+            });
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            }
+        }
 
-    @Override
-    @SuppressWarnings("all")
-    protected void initResource(Bundle savedInstanceState) {
-        setSupportActionBar(R.id.circleprogressbar_toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         density = getResources().getDisplayMetrics().density;
-        cpbDemo = (CircleProgressBar) findViewById(R.id.circleprogressbar_cpb_demo);
-        vgControl = (ViewGroup) findViewById(R.id.circleprogressbar_lyt_control);
+        cpbDemo = findViewById(R.id.circleprogressbar_cpb_demo);
+        vgControl = findViewById(R.id.circleprogressbar_lyt_control);
         initBase();
         initProgress();
         initDial();
@@ -51,47 +61,47 @@ public class CircleProgressBarActivity extends BaseActivity implements
     private void initBase() {
         vBase = LayoutInflater.from(this).inflate(R.layout.include_circleprogressbar_base, vgControl,
                 false);
-        rgGravity1 = (RadioGroup) vBase.findViewById(R.id.cpb_rg_gravity_1);
+        rgGravity1 = vBase.findViewById(R.id.cpb_rg_gravity_1);
         rgGravity1.setOnCheckedChangeListener(this);
-        rgGravity2 = (RadioGroup) vBase.findViewById(R.id.cpb_rg_gravity_2);
+        rgGravity2 = vBase.findViewById(R.id.cpb_rg_gravity_2);
         rgGravity2.setOnCheckedChangeListener(this);
-        rgGravity3 = (RadioGroup) vBase.findViewById(R.id.cpb_rg_gravity_3);
+        rgGravity3 = vBase.findViewById(R.id.cpb_rg_gravity_3);
         rgGravity3.setOnCheckedChangeListener(this);
-        SeekBar sbRadius = (SeekBar) vBase.findViewById(R.id.cpb_sb_radius);
+        SeekBar sbRadius = vBase.findViewById(R.id.cpb_sb_radius);
         sbRadius.setOnSeekBarChangeListener(this);
-        RadioGroup rgScaleType = (RadioGroup) vBase.findViewById(R.id.cpb_rg_scale_type);
+        RadioGroup rgScaleType = vBase.findViewById(R.id.cpb_rg_scale_type);
         rgScaleType.setOnCheckedChangeListener(this);
     }
 
     private void initProgress() {
         vProgress = LayoutInflater.from(this).inflate(R.layout.include_circleprogressbar_progress,
                 vgControl, false);
-        SeekBar sbStartAngle = (SeekBar) vProgress.findViewById(R.id.cpb_sb_start_angle);
+        SeekBar sbStartAngle = vProgress.findViewById(R.id.cpb_sb_start_angle);
         sbStartAngle.setOnSeekBarChangeListener(this);
-        SeekBar sbSweepAngle = (SeekBar) vProgress.findViewById(R.id.cpb_sb_sweep_angle);
+        SeekBar sbSweepAngle =  vProgress.findViewById(R.id.cpb_sb_sweep_angle);
         sbSweepAngle.setOnSeekBarChangeListener(this);
-        SeekBar sbBackgroundSize = (SeekBar) vProgress.findViewById(R.id.cpb_sb_background_size);
+        SeekBar sbBackgroundSize = vProgress.findViewById(R.id.cpb_sb_background_size);
         sbBackgroundSize.setOnSeekBarChangeListener(this);
-        SeekBar sbProgressSize = (SeekBar) vProgress.findViewById(R.id.cpb_sb_progress_size);
+        SeekBar sbProgressSize = vProgress.findViewById(R.id.cpb_sb_progress_size);
         sbProgressSize.setOnSeekBarChangeListener(this);
-        SeekBar sbProgress = (SeekBar) vProgress.findViewById(R.id.cpb_sb_progress);
+        SeekBar sbProgress = vProgress.findViewById(R.id.cpb_sb_progress);
         sbProgress.setOnSeekBarChangeListener(this);
-        Switch stGradient = (Switch) vProgress.findViewById(R.id.cpb_st_gradient);
+        Switch stGradient = vProgress.findViewById(R.id.cpb_st_gradient);
         stGradient.setOnCheckedChangeListener(this);
-        Switch stProgressValue = (Switch) vProgress.findViewById(R.id.cpb_st_progress_value);
+        Switch stProgressValue = vProgress.findViewById(R.id.cpb_st_progress_value);
         stProgressValue.setOnCheckedChangeListener(this);
-        SeekBar sbProgressValueTextSize = (SeekBar)
+        SeekBar sbProgressValueTextSize =
                 vProgress.findViewById(R.id.cpb_sb_progress_value_text_size);
         sbProgressValueTextSize.setOnSeekBarChangeListener(this);
-        SeekBar sbTopTextGap = (SeekBar) vProgress.findViewById(R.id.cpb_sb_top_text_gap);
+        SeekBar sbTopTextGap = vProgress.findViewById(R.id.cpb_sb_top_text_gap);
         sbTopTextGap.setOnSeekBarChangeListener(this);
-        SeekBar sbTopTextSize = (SeekBar) vProgress.findViewById(R.id.cpb_sb_top_text_size);
+        SeekBar sbTopTextSize = vProgress.findViewById(R.id.cpb_sb_top_text_size);
         sbTopTextSize.setOnSeekBarChangeListener(this);
-        SeekBar sbBottomTextGap = (SeekBar) vProgress.findViewById(R.id.cpb_sb_bottom_text_gap);
+        SeekBar sbBottomTextGap = vProgress.findViewById(R.id.cpb_sb_bottom_text_gap);
         sbBottomTextGap.setOnSeekBarChangeListener(this);
-        SeekBar sbBottomTextSize = (SeekBar) vProgress.findViewById(R.id.cpb_sb_bottom_text_size);
+        SeekBar sbBottomTextSize = vProgress.findViewById(R.id.cpb_sb_bottom_text_size);
         sbBottomTextSize.setOnSeekBarChangeListener(this);
-        SeekBar sbProgressDuration = (SeekBar) vProgress.findViewById(R.id.cpb_sb_progress_duration);
+        SeekBar sbProgressDuration = vProgress.findViewById(R.id.cpb_sb_progress_duration);
         sbProgressDuration.setOnSeekBarChangeListener(this);
         vProgress.findViewById(R.id.cpb_btn_progress_animator).setOnClickListener(this);
     }
@@ -99,29 +109,29 @@ public class CircleProgressBarActivity extends BaseActivity implements
     private void initDial() {
         vDial = LayoutInflater.from(this).inflate(R.layout.include_circleprogressbar_dial,
                 vgControl, false);
-        RadioGroup rgVisibility = (RadioGroup) vDial.findViewById(R.id.cpb_rg_dial_visibility);
+        RadioGroup rgVisibility = vDial.findViewById(R.id.cpb_rg_dial_visibility);
         rgVisibility.setOnCheckedChangeListener(this);
-        SeekBar sbDialGap = (SeekBar) vDial.findViewById(R.id.cpb_sb_dial_gap);
+        SeekBar sbDialGap = vDial.findViewById(R.id.cpb_sb_dial_gap);
         sbDialGap.setOnSeekBarChangeListener(this);
-        SeekBar sbDialAngle = (SeekBar) vDial.findViewById(R.id.cpb_sb_dial_angle);
+        SeekBar sbDialAngle = vDial.findViewById(R.id.cpb_sb_dial_angle);
         sbDialAngle.setOnSeekBarChangeListener(this);
-        SeekBar sbDialHeight = (SeekBar) vDial.findViewById(R.id.cpb_sb_dial_height);
+        SeekBar sbDialHeight = vDial.findViewById(R.id.cpb_sb_dial_height);
         sbDialHeight.setOnSeekBarChangeListener(this);
-        SeekBar sbDialWidth = (SeekBar) vDial.findViewById(R.id.cpb_sb_dial_width);
+        SeekBar sbDialWidth = vDial.findViewById(R.id.cpb_sb_dial_width);
         sbDialWidth.setOnSeekBarChangeListener(this);
-        SeekBar sbDialSpecialUnit = (SeekBar) vDial.findViewById(R.id.cpb_sb_dial_special_unit);
+        SeekBar sbDialSpecialUnit = vDial.findViewById(R.id.cpb_sb_dial_special_unit);
         sbDialSpecialUnit.setOnSeekBarChangeListener(this);
-        SeekBar sbDialSpecialHeight = (SeekBar) vDial.findViewById(R.id.cpb_sb_dial_special_height);
+        SeekBar sbDialSpecialHeight = vDial.findViewById(R.id.cpb_sb_dial_special_height);
         sbDialSpecialHeight.setOnSeekBarChangeListener(this);
-        SeekBar sbDialSpecialWidth = (SeekBar) vDial.findViewById(R.id.cpb_sb_dial_special_width);
+        SeekBar sbDialSpecialWidth = vDial.findViewById(R.id.cpb_sb_dial_special_width);
         sbDialSpecialWidth.setOnSeekBarChangeListener(this);
-        RadioGroup rgDialGravity = (RadioGroup) vDial.findViewById(R.id.cpb_rg_dial_gravity);
+        RadioGroup rgDialGravity = vDial.findViewById(R.id.cpb_rg_dial_gravity);
         rgDialGravity.setOnCheckedChangeListener(this);
-        Switch stSpecialDialValue = (Switch) vDial.findViewById(R.id.cpb_st_special_dial_value);
+        Switch stSpecialDialValue = vDial.findViewById(R.id.cpb_st_special_dial_value);
         stSpecialDialValue.setOnCheckedChangeListener(this);
-        SeekBar sbSpecialDialValueGap = (SeekBar) vDial.findViewById(R.id.cpb_sb_special_dial_value_gap);
+        SeekBar sbSpecialDialValueGap = vDial.findViewById(R.id.cpb_sb_special_dial_value_gap);
         sbSpecialDialValueGap.setOnSeekBarChangeListener(this);
-        SeekBar sbSpecialDialValueTextSize = (SeekBar)
+        SeekBar sbSpecialDialValueTextSize =
                 vDial.findViewById(R.id.cpb_sb_special_dial_value_text_size);
         sbSpecialDialValueTextSize.setOnSeekBarChangeListener(this);
     }
@@ -129,17 +139,17 @@ public class CircleProgressBarActivity extends BaseActivity implements
     private void initLoading() {
         vLoading = LayoutInflater.from(this).inflate(R.layout.include_circleprogressbar_loading,
                 vgControl, false);
-        RadioGroup rgProgressMode = (RadioGroup) vLoading.findViewById(R.id.cpb_rg_progress_mode);
+        RadioGroup rgProgressMode = vLoading.findViewById(R.id.cpb_rg_progress_mode);
         rgProgressMode.setOnCheckedChangeListener(this);
-        SeekBar sbLoadingStartAngle = (SeekBar) vLoading.findViewById(R.id.cpb_sb_loading_start_angle);
+        SeekBar sbLoadingStartAngle = vLoading.findViewById(R.id.cpb_sb_loading_start_angle);
         sbLoadingStartAngle.setOnSeekBarChangeListener(this);
-        SeekBar sbLoadingSweepAngle = (SeekBar) vLoading.findViewById(R.id.cpb_sb_loading_sweep_angle);
+        SeekBar sbLoadingSweepAngle = vLoading.findViewById(R.id.cpb_sb_loading_sweep_angle);
         sbLoadingSweepAngle.setOnSeekBarChangeListener(this);
-        SeekBar sbLoadingDuration = (SeekBar) vLoading.findViewById(R.id.cpb_sb_loading_duration);
+        SeekBar sbLoadingDuration = vLoading.findViewById(R.id.cpb_sb_loading_duration);
         sbLoadingDuration.setOnSeekBarChangeListener(this);
-        RadioGroup rgRepeatMode = (RadioGroup) vLoading.findViewById(R.id.cpb_rg_repeat_mode);
+        RadioGroup rgRepeatMode = vLoading.findViewById(R.id.cpb_rg_repeat_mode);
         rgRepeatMode.setOnCheckedChangeListener(this);
-        Switch stDrawOther = (Switch) vLoading.findViewById(R.id.cpb_st_loading_draw_other);
+        Switch stDrawOther = vLoading.findViewById(R.id.cpb_st_loading_draw_other);
         stDrawOther.setOnCheckedChangeListener(this);
     }
 
