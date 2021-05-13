@@ -1,1 +1,3 @@
+rootProject.name = "CircleProgressBar"
 include ':app'
+include ':circleprogressbar'
